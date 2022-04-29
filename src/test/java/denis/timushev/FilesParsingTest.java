@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,6 +61,17 @@ public class FilesParsingTest {
                     "Series_title_3",
                     "Series_title_4",
                     "Series_title_5");
+        }
+    }
+
+    @Test
+    void parseZipTest() throws Exception {
+        try (InputStream is = classLoader.getResourceAsStream("files/sample zip.zip");
+             ZipInputStream zis = new ZipInputStream(is)) {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                assertThat(entry.getName()).isEqualTo("sample.txt");
+            }
         }
     }
 }
